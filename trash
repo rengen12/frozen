@@ -1,0 +1,21 @@
+//adduser("name", "", "", "")
+
+	users.PushBack(person{"name", "rname", "password", "email"})
+
+	/*for e := users.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}*/
+
+	/*for e := users.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}
+	adduser("name1", "", "", "")
+	for e := users.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}
+	adduser("name", "qq", "ww", "ee")*/
+	for e := users.Front(); e != nil; e = e.Next() {
+		fmt.Println(e)
+	}
+	//ExampleListener();
+  }

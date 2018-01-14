@@ -1,24 +1,31 @@
 package main
   
-  import (
+ import (
 	"fmt"
 	"io"
 	"log"
 	"net"
-	"container/list"
 	//"os"
-  )
-  
-type person struct {
+	 "bufio"
+	 //"io/ioutil"
+	// "net/textproto"
+	 "strings"
+ )
+ 
+type server struct {
+	host		string
+	
+	users		[]string
+}
+
+type user struct {
 	nick		string
 	rname		string
 	password	string
 	email		string
-}
+	conn 		string
+	chanels		[]string
 
-type user struct {
-	
-	chanels []string
 }
 
   func ExampleListener() {
@@ -49,14 +56,29 @@ type user struct {
 	}
   }
 
-func adduser(nick, rname, password, email string) {
-	fmt.Println(lst)
-}
+  func handle_conn(conn net.Conn, srv server) {
+  	srv.host = "localhost"
 
+	  for {
+		  // will listen for message to process ending in newline (\n)
+		  message, _ := bufio.NewReader(conn).ReadString('\n')
+		  // output message received
+		  fmt.Print("Message Received:", string(message))
+		  // sample process for string received
+		  newmessage := strings.ToUpper(message)
+		  // send new string back to client
+		  conn.Write([]byte(newmessage + "\n"))
+	  }
+	  //io.Copy(conn, conn)
+	  //status, _ := bufio.NewReader(conn).ReadString(' ')
+	  //fmt.Print("status", status)
+
+  }
 
 func main() {
 	
  l, err := net.Listen("tcp", ":6667")
+ var srv server
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,27 +88,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		go parse_input(conn, &users)
+		go handle_conn(conn, srv)
 	}
 }
-	//adduser("name", "", "", "")
-
-	users.PushBack(person{"name", "rname", "password", "email"})
-
-	/*for e := users.Front(); e != nil; e = e.Next() {
-		fmt.Println(e.Value)
-	}*/
-
-	/*for e := users.Front(); e != nil; e = e.Next() {
-		fmt.Println(e.Value)
-	}
-	adduser("name1", "", "", "")
-	for e := users.Front(); e != nil; e = e.Next() {
-		fmt.Println(e.Value)
-	}
-	adduser("name", "qq", "ww", "ee")*/
-	for e := users.Front(); e != nil; e = e.Next() {
-		fmt.Println(e)
-	}
-	//ExampleListener();
-  }
